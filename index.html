@@ -8,7 +8,7 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Montserrat:ital,wght@0,400;0,500;0,600;1,400&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Dancing+Script:wght@500;600;700&family=Great+Vibes&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
 
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -20,7 +20,6 @@
       --card-pink-main: #f43f5e;
       --card-pink-light: #fff1f2;
       --gold-accent: #d97706;
-      --gold-gradient: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728, #fbf5b7);
       --text-color: #4c0519;
     }
 
@@ -218,11 +217,6 @@
       justify-content: space-between;
     }
 
-    /* Mặt 4: Bìa sau */
-    .page-4 {
-      display: none; /* Mặt sau ẩn tự nhiên trong hiệu ứng 3D */
-    }
-
     /* Trang trí hoa & Tiêu đề */
     .flower-illustration {
       width: 140px;
@@ -275,36 +269,32 @@
       50% { transform: scale(1.04); opacity: 1; }
     }
 
-    /* Nội dung Lời Chúc */
+    /* Nội dung Lời Chúc phông Script */
     .quote-decor {
-      font-family: 'Dancing Script', cursive;
-      font-size: 1.4rem;
+      font-family: 'Great Vibes', cursive;
+      font-size: 2.2rem;
       color: var(--card-pink-dark);
       text-align: center;
       border-bottom: 1px solid #ffe4e6;
-      padding-bottom: 10px;
-      margin-bottom: 15px;
+      padding-bottom: 5px;
+      margin-bottom: 10px;
     }
 
     .wish-text {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 0.88rem;
-      line-height: 1.65;
-      color: #374151;
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.25rem;
+      font-weight: 600;
+      line-height: 1.5;
+      color: #881337;
       text-align: justify;
       white-space: pre-wrap;
       min-height: 220px;
     }
 
-    .wish-text p {
-      margin-bottom: 12px;
-      text-indent: 15px;
-    }
-
     .typing-cursor {
       display: inline-block;
       width: 2px;
-      height: 14px;
+      height: 18px;
       background-color: var(--card-pink-main);
       margin-left: 2px;
       animation: blink 0.8s infinite;
@@ -437,7 +427,7 @@
     // Initialize Lucide Icons
     lucide.createIcons();
 
-    // 1. DỮ LIỆU LỜI CHÚC (Được chia làm 2 phần cho 2 trang)
+    // DỮ LIỆU LỜI CHÚC
     const textPart1 = "Cảm ơn Thầy/Cô vì không chỉ mang đến cho chúng con kho tàng tri thức, mà còn bao dung với những lần chúng con ngây ngô, nghịch ngợm. Từng lời răn dạy nghiêm khắc nhưng đầy tình thương, từng ánh mắt lo lắng khi thấy chúng con chểnh mảng học hành... tất cả con đều khắc sâu trong lòng.\n\nThầy/Cô chính là người đã kiên nhẫn uốn nắn, giúp con trưởng thành và vững vàng hơn từng ngày.";
 
     const textPart2 = "Nhân ngày đặc biệt này, con kính chúc Thầy/Cô luôn dồi dào sức khỏe, luôn bình an và giữ mãi ngọn lửa nhiệt huyết với nghề.\n\nMong rằng nụ cười sẽ luôn rạng rỡ trên môi Thầy/Cô khi nhìn thấy các thế hệ học trò của mình khôn lớn, nên người.\n\nChúng con yêu Thầy/Cô rất nhiều!";
@@ -502,32 +492,27 @@
 
       const cursor = '<span class="typing-cursor"></span>';
 
-      // Type Part 1
       function typeP1() {
         if (i < textPart1.length) {
-          const char = textPart1.charAt(i);
           wishEl2.innerHTML = textPart1.substring(0, i + 1) + cursor;
           i++;
-          typingTimer1 = setTimeout(typeP1, 30);
+          typingTimer1 = setTimeout(typeP1, 28);
         } else {
-          wishEl2.innerHTML = textPart1; // Gỡ cursor trang 1
-          // Bắt đầu gõ Part 2
+          wishEl2.innerHTML = textPart1;
           typeP2();
         }
       }
 
-      // Type Part 2
       function typeP2() {
         if (j < textPart2.length) {
           wishEl3.innerHTML = textPart2.substring(0, j + 1) + cursor;
           j++;
-          typingTimer2 = setTimeout(typeP2, 30);
+          typingTimer2 = setTimeout(typeP2, 28);
         } else {
-          wishEl3.innerHTML = textPart2; // Gỡ cursor trang 2 khi xong
+          wishEl3.innerHTML = textPart2;
         }
       }
 
-      // Trễ nhẹ để đợi hiệu ứng lật 3D mở xong
       setTimeout(typeP1, 400);
     }
 
@@ -567,14 +552,11 @@
     let isDragging = false;
     let startX = 0;
     let startY = 0;
-    let dragThreshold = false;
 
     function onPointerDown(e) {
-      // Chỉ cho kéo khi không click trực tiếp vào nút Đóng
       if (e.target.closest('.btn-close-card') || e.target.closest('.controls-bar')) return;
 
       isDragging = true;
-      dragThreshold = false;
       const clientX = e.touches ? e.touches[0].clientX : e.clientX;
       const clientY = e.touches ? e.touches[0].clientY : e.clientY;
 
@@ -588,15 +570,8 @@
       const clientX = e.touches ? e.touches[0].clientX : e.clientX;
       const clientY = e.touches ? e.touches[0].clientY : e.clientY;
 
-      const newX = clientX - startX;
-      const newY = clientY - startY;
-
-      if (Math.abs(newX - posX) > 3 || Math.abs(newY - posY) > 3) {
-        dragThreshold = true;
-      }
-
-      posX = newX;
-      posY = newY;
+      posX = clientX - startX;
+      posY = clientY - startY;
       updateTransform();
     }
 
