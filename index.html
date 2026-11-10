@@ -1,1 +1,684 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Thiệp Chúc Mừng 20/11 Tri Ân Thầy Cô</title>
 
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Montserrat:ital,wght@0,400;0,500;0,600;1,400&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #ffe4e6 0%, #fecdd3 50%, #fda4af 100%);
+      --card-pink-dark: #e11d48;
+      --card-pink-main: #f43f5e;
+      --card-pink-light: #fff1f2;
+      --gold-accent: #d97706;
+      --gold-gradient: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728, #fbf5b7);
+      --text-color: #4c0519;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    body, html {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Montserrat', sans-serif;
+      background: var(--bg-gradient);
+    }
+
+    /* Canvas hiệu ứng hoa rơi */
+    #petal-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Floating Toolbar */
+    .controls-bar {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 100;
+      display: flex;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(10px);
+      padding: 8px 16px;
+      border-radius: 30px;
+      box-shadow: 0 4px 20px rgba(225, 29, 72, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+    }
+
+    .btn-tool {
+      background: transparent;
+      border: none;
+      color: var(--card-pink-dark);
+      cursor: pointer;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .btn-tool:hover {
+      background: rgba(244, 63, 94, 0.15);
+      transform: scale(1.1);
+    }
+
+    .btn-tool:active {
+      transform: scale(0.95);
+    }
+
+    /* Card App Wrapper & Drag Container */
+    .app-container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 10;
+    }
+
+    /* Container di chuyển (Drag) & Thu phóng (Scale) */
+    .drag-wrapper {
+      position: absolute;
+      cursor: grab;
+      touch-action: none;
+      transform-origin: center center;
+      transition: transform 0.05s linear;
+    }
+
+    .drag-wrapper:active {
+      cursor: grabbing;
+    }
+
+    /* Khung 3D của sách thiệp */
+    .book-container {
+      width: 360px;
+      height: 520px;
+      perspective: 1600px;
+      position: relative;
+      transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    @media (max-width: 480px) {
+      .book-container {
+        width: 320px;
+        height: 470px;
+      }
+    }
+
+    /* Tấm lật Trái (Trang 1 và 2) */
+    .book-cover {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform-style: preserve-3d;
+      transform-origin: left center;
+      transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 5;
+    }
+
+    /* Khi mở thiệp */
+    .book-container.open .book-cover {
+      transform: rotateY(-180deg);
+    }
+
+    .book-container.open {
+      transform: translateX(50%);
+    }
+
+    @media (max-width: 768px) {
+      .book-container.open {
+        transform: translateX(25%) scale(0.9);
+      }
+    }
+
+    /* Thiết kế các trang (Pages) */
+    .page-face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      backface-visibility: hidden;
+      border-radius: 16px;
+      box-shadow: 0 15px 35px rgba(159, 18, 57, 0.2);
+      overflow: hidden;
+      background: #fff;
+    }
+
+    /* Mặt 1: Bìa trước */
+    .page-1 {
+      background: linear-gradient(145deg, #fff1f2 0%, #ffe4e6 100%);
+      border: 3px solid #fda4af;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 30px 20px;
+      text-align: center;
+    }
+
+    .page-1::before {
+      content: '';
+      position: absolute;
+      inset: 12px;
+      border: 1px dashed #f43f5e;
+      border-radius: 10px;
+      pointer-events: none;
+    }
+
+    /* Mặt 2: Trang trong trái */
+    .page-2 {
+      transform: rotateY(180deg);
+      background: #fff;
+      border: 1px solid #fecdd3;
+      padding: 30px 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* Mặt 3: Trang trong phải (Đế cố định) */
+    .page-3 {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+      background: #fff;
+      border: 1px solid #fecdd3;
+      padding: 30px 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* Mặt 4: Bìa sau */
+    .page-4 {
+      display: none; /* Mặt sau ẩn tự nhiên trong hiệu ứng 3D */
+    }
+
+    /* Trang trí hoa & Tiêu đề */
+    .flower-illustration {
+      width: 140px;
+      height: 140px;
+      position: relative;
+      margin: 10px auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .flower-illustration svg {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 8px 15px rgba(225, 29, 72, 0.2));
+    }
+
+    .card-title-main {
+      font-family: 'Great Vibes', cursive;
+      font-size: 2.8rem;
+      color: var(--card-pink-dark);
+      line-height: 1.2;
+      margin-top: 10px;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+    }
+
+    .card-subtitle {
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.6rem;
+      color: var(--gold-accent);
+      margin-bottom: 5px;
+      font-weight: 700;
+    }
+
+    .open-hint {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      color: #9f1239;
+      background: rgba(244, 63, 94, 0.1);
+      padding: 8px 18px;
+      border-radius: 20px;
+      animation: pulse 2s infinite;
+      cursor: pointer;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.9; }
+      50% { transform: scale(1.04); opacity: 1; }
+    }
+
+    /* Nội dung Lời Chúc */
+    .quote-decor {
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.4rem;
+      color: var(--card-pink-dark);
+      text-align: center;
+      border-bottom: 1px solid #ffe4e6;
+      padding-bottom: 10px;
+      margin-bottom: 15px;
+    }
+
+    .wish-text {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.88rem;
+      line-height: 1.65;
+      color: #374151;
+      text-align: justify;
+      white-space: pre-wrap;
+      min-height: 220px;
+    }
+
+    .wish-text p {
+      margin-bottom: 12px;
+      text-indent: 15px;
+    }
+
+    .typing-cursor {
+      display: inline-block;
+      width: 2px;
+      height: 14px;
+      background-color: var(--card-pink-main);
+      margin-left: 2px;
+      animation: blink 0.8s infinite;
+      vertical-align: middle;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    /* Footer Trang Trong */
+    .page-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px dashed #fecdd3;
+      padding-top: 10px;
+      font-size: 0.75rem;
+      color: #9ca3af;
+    }
+
+    .btn-close-card {
+      background: var(--card-pink-main);
+      color: #fff;
+      border: none;
+      padding: 6px 16px;
+      border-radius: 15px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(244, 63, 94, 0.3);
+      transition: all 0.2s;
+    }
+
+    .btn-close-card:hover {
+      background: var(--card-pink-dark);
+      transform: translateY(-1px);
+    }
+
+    /* Họa tiết góc thiệp */
+    .corner-ornament {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      pointer-events: none;
+      opacity: 0.4;
+    }
+
+    .top-left { top: 8px; left: 8px; }
+    .bottom-right { bottom: 8px; right: 8px; transform: rotate(180deg); }
+  </style>
+</head>
+<body>
+
+  <!-- Canvas cánh hoa rơi -->
+  <canvas id="petal-canvas"></canvas>
+
+  <!-- Toolbar công cụ Zoom & Move -->
+  <div class="controls-bar">
+    <button class="btn-tool" id="btn-zoom-in" title="Phóng to"><i data-lucide="zoom-in"></i></button>
+    <button class="btn-tool" id="btn-zoom-out" title="Thu nhỏ"><i data-lucide="zoom-out"></i></button>
+    <button class="btn-tool" id="btn-reset-pos" title="Về chính giữa"><i data-lucide="rotate-ccw"></i></button>
+  </div>
+
+  <!-- Main Container -->
+  <div class="app-container">
+    <div class="drag-wrapper" id="drag-wrapper">
+      
+      <!-- Quyển sách Thiệp 3D 4 Mặt -->
+      <div class="book-container" id="book-card">
+        
+        <!-- Tấm lật (Bìa 1 + Trang 2) -->
+        <div class="book-cover">
+          
+          <!-- Mặt 1: Bìa Thiệp -->
+          <div class="page-face page-1">
+            <div class="card-subtitle">Tri Ân Ngày 20/11</div>
+            
+            <div class="flower-illustration">
+              <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="100" cy="100" r="80" fill="#FFE4E6"/>
+                <path d="M100 140C100 140 70 110 50 85C30 60 50 30 75 30C90 30 100 45 100 45C100 45 110 30 125 30C150 30 170 60 150 85C130 110 100 140 100 140Z" fill="#F43F5E"/>
+                <path d="M100 130C100 130 75 105 58 83C42 61 58 35 78 35C90 35 100 48 100 48C100 48 110 35 122 35C142 35 158 61 142 83C125 105 100 130 100 130Z" fill="#FB7185"/>
+                <path d="M70 140Q100 170 130 140" stroke="#E11D48" stroke-width="4" stroke-linecap="round"/>
+                <path d="M100 140L100 175" stroke="#059669" stroke-width="5" stroke-linecap="round"/>
+                <path d="M100 160Q80 150 65 160" stroke="#10B981" stroke-width="4" stroke-linecap="round"/>
+                <path d="M100 165Q120 155 135 165" stroke="#10B981" stroke-width="4" stroke-linecap="round"/>
+              </svg>
+            </div>
+
+            <div class="card-title-main">Chúc Mừng<br>Ngày Nhà Giáo Việt Nam</div>
+
+            <div class="open-hint" id="hint-click">
+              <i data-lucide="sparkles" style="width: 16px; height: 16px;"></i>
+              <span>Nhấp để mở thiệp</span>
+            </div>
+          </div>
+
+          <!-- Mặt 2: Trang Trong Trái -->
+          <div class="page-face page-2">
+            <svg class="corner-ornament top-left" viewBox="0 0 50 50"><path d="M0 0 L50 0 L0 50 Z" fill="#F43F5E"/></svg>
+            <div class="quote-decor">Kính Gửi Thầy Cô</div>
+            <div class="wish-text" id="wish-text-page2"></div>
+            <div class="page-footer">
+              <span>Trang 1/2</span>
+              <i data-lucide="heart" style="width:14px; height:14px; color:#f43f5e;"></i>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Mặt 3: Trang Trong Phải (Cố định làm đế) -->
+        <div class="page-face page-3">
+          <svg class="corner-ornament bottom-right" viewBox="0 0 50 50"><path d="M0 0 L50 0 L0 50 Z" fill="#F43F5E"/></svg>
+          <div class="quote-decor">Lời Tri Ân Sâu Sắc</div>
+          <div class="wish-text" id="wish-text-page3"></div>
+          <div class="page-footer">
+            <span>20/11 Tri Ân</span>
+            <button class="btn-close-card" id="btn-close">Đóng Thiệp</button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
+    // 1. DỮ LIỆU LỜI CHÚC (Được chia làm 2 phần cho 2 trang)
+    const textPart1 = "Cảm ơn Thầy/Cô vì không chỉ mang đến cho chúng con kho tàng tri thức, mà còn bao dung với những lần chúng con ngây ngô, nghịch ngợm. Từng lời răn dạy nghiêm khắc nhưng đầy tình thương, từng ánh mắt lo lắng khi thấy chúng con chểnh mảng học hành... tất cả con đều khắc sâu trong lòng.\n\nThầy/Cô chính là người đã kiên nhẫn uốn nắn, giúp con trưởng thành và vững vàng hơn từng ngày.";
+
+    const textPart2 = "Nhân ngày đặc biệt này, con kính chúc Thầy/Cô luôn dồi dào sức khỏe, luôn bình an và giữ mãi ngọn lửa nhiệt huyết với nghề.\n\nMong rằng nụ cười sẽ luôn rạng rỡ trên môi Thầy/Cô khi nhìn thấy các thế hệ học trò của mình khôn lớn, nên người.\n\nChúng con yêu Thầy/Cô rất nhiều!";
+
+    // Elements
+    const bookCard = document.getElementById('book-card');
+    const dragWrapper = document.getElementById('drag-wrapper');
+    const hintClick = document.getElementById('hint-click');
+    const btnClose = document.getElementById('btn-close');
+    const wishEl2 = document.getElementById('wish-text-page2');
+    const wishEl3 = document.getElementById('wish-text-page3');
+
+    // Controls
+    const btnZoomIn = document.getElementById('btn-zoom-in');
+    const btnZoomOut = document.getElementById('btn-zoom-out');
+    const btnResetPos = document.getElementById('btn-reset-pos');
+
+    let isOpen = false;
+    let typingTimer1 = null;
+    let typingTimer2 = null;
+
+    // Transform States
+    let currentScale = 1;
+    let posX = 0;
+    let posY = 0;
+
+    function updateTransform() {
+      dragWrapper.style.transform = `translate(${posX}px, ${posY}px) scale(${currentScale})`;
+    }
+
+    // --- HIỆU ỨNG MỞ / ĐÓNG THIỆP & GÕ CHỮ ---
+    function openCard() {
+      if (isOpen) return;
+      isOpen = true;
+      bookCard.classList.add('open');
+      startTyping();
+    }
+
+    function closeCard(e) {
+      if (e) e.stopPropagation();
+      if (!isOpen) return;
+      isOpen = false;
+      bookCard.classList.remove('open');
+      clearTyping();
+    }
+
+    bookCard.addEventListener('click', (e) => {
+      if (!isOpen && !isDragging) {
+        openCard();
+      }
+    });
+
+    btnClose.addEventListener('click', closeCard);
+
+    function startTyping() {
+      clearTyping();
+      wishEl2.innerHTML = '';
+      wishEl3.innerHTML = '';
+
+      let i = 0;
+      let j = 0;
+
+      const cursor = '<span class="typing-cursor"></span>';
+
+      // Type Part 1
+      function typeP1() {
+        if (i < textPart1.length) {
+          const char = textPart1.charAt(i);
+          wishEl2.innerHTML = textPart1.substring(0, i + 1) + cursor;
+          i++;
+          typingTimer1 = setTimeout(typeP1, 30);
+        } else {
+          wishEl2.innerHTML = textPart1; // Gỡ cursor trang 1
+          // Bắt đầu gõ Part 2
+          typeP2();
+        }
+      }
+
+      // Type Part 2
+      function typeP2() {
+        if (j < textPart2.length) {
+          wishEl3.innerHTML = textPart2.substring(0, j + 1) + cursor;
+          j++;
+          typingTimer2 = setTimeout(typeP2, 30);
+        } else {
+          wishEl3.innerHTML = textPart2; // Gỡ cursor trang 2 khi xong
+        }
+      }
+
+      // Trễ nhẹ để đợi hiệu ứng lật 3D mở xong
+      setTimeout(typeP1, 400);
+    }
+
+    function clearTyping() {
+      if (typingTimer1) clearTimeout(typingTimer1);
+      if (typingTimer2) clearTimeout(typingTimer2);
+      wishEl2.innerHTML = '';
+      wishEl3.innerHTML = '';
+    }
+
+    // --- THU PHÓNG (ZOOM) & ĐẶT LẠI VỊ TRÍ ---
+    btnZoomIn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (currentScale < 1.8) {
+        currentScale += 0.15;
+        updateTransform();
+      }
+    });
+
+    btnZoomOut.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (currentScale > 0.6) {
+        currentScale -= 0.15;
+        updateTransform();
+      }
+    });
+
+    btnResetPos.addEventListener('click', (e) => {
+      e.stopPropagation();
+      currentScale = 1;
+      posX = 0;
+      posY = 0;
+      updateTransform();
+    });
+
+    // --- DI CHUYỂN THIỆP (DRAG & MOVE) ---
+    let isDragging = false;
+    let startX = 0;
+    let startY = 0;
+    let dragThreshold = false;
+
+    function onPointerDown(e) {
+      // Chỉ cho kéo khi không click trực tiếp vào nút Đóng
+      if (e.target.closest('.btn-close-card') || e.target.closest('.controls-bar')) return;
+
+      isDragging = true;
+      dragThreshold = false;
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+      startX = clientX - posX;
+      startY = clientY - posY;
+    }
+
+    function onPointerMove(e) {
+      if (!isDragging) return;
+
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+      const newX = clientX - startX;
+      const newY = clientY - startY;
+
+      if (Math.abs(newX - posX) > 3 || Math.abs(newY - posY) > 3) {
+        dragThreshold = true;
+      }
+
+      posX = newX;
+      posY = newY;
+      updateTransform();
+    }
+
+    function onPointerUp() {
+      isDragging = false;
+    }
+
+    dragWrapper.addEventListener('mousedown', onPointerDown);
+    window.addEventListener('mousemove', onPointerMove);
+    window.addEventListener('mouseup', onPointerUp);
+
+    dragWrapper.addEventListener('touchstart', onPointerDown, { passive: true });
+    window.addEventListener('touchmove', onPointerMove, { passive: true });
+    window.addEventListener('touchend', onPointerUp);
+
+    // --- HIỆU ỨNG CÁNH HOA RƠI (CANVAS PETALS) ---
+    const canvas = document.getElementById('petal-canvas');
+    const ctx = canvas.getContext('2d');
+
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+
+    window.addEventListener('resize', () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    });
+
+    class Petal {
+      constructor() {
+        this.reset();
+      }
+
+      reset() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * -height;
+        this.size = Math.random() * 12 + 8;
+        this.speedY = Math.random() * 1.5 + 0.8;
+        this.speedX = Math.random() * 1 - 0.5;
+        this.angle = Math.random() * Math.PI * 2;
+        this.spin = (Math.random() - 0.5) * 0.02;
+        this.color = ['#f43f5e', '#fb7185', '#fda4af', '#fecdd3'][Math.floor(Math.random() * 4)];
+        this.opacity = Math.random() * 0.6 + 0.4;
+      }
+
+      update() {
+        this.y += this.speedY;
+        this.x += Math.sin(this.angle) * 0.8 + this.speedX;
+        this.angle += this.spin;
+
+        if (this.y > height + 20) {
+          this.reset();
+        }
+      }
+
+      draw() {
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.angle);
+        ctx.globalAlpha = this.opacity;
+        ctx.fillStyle = this.color;
+        
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.bezierCurveTo(-this.size / 2, -this.size / 2, -this.size, this.size / 3, 0, this.size);
+        ctx.bezierCurveTo(this.size, this.size / 3, this.size / 2, -this.size / 2, 0, 0);
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    const petals = Array.from({ length: 35 }, () => new Petal());
+
+    function animatePetals() {
+      ctx.clearRect(0, 0, width, height);
+      petals.forEach(p => {
+        p.update();
+        p.draw();
+      });
+      requestAnimationFrame(animatePetals);
+    }
+
+    animatePetals();
+  </script>
+</body>
+</html>
