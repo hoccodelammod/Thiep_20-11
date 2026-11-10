@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Thiệp Chúc Mừng 20/11 Tri Ân Thầy Cô</title>
 
-  <!-- Google Fonts -->
+  <!-- Google Fonts Script -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Dancing+Script:wght@500;600;700&family=Great+Vibes&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;600;700&family=Great+Vibes&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
 
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -89,7 +89,7 @@
       transform: scale(0.95);
     }
 
-    /* Card App Wrapper & Drag Container */
+    /* App Container & Drag Wrapper */
     .app-container {
       width: 100%;
       height: 100%;
@@ -100,7 +100,6 @@
       z-index: 10;
     }
 
-    /* Container di chuyển (Drag) & Thu phóng (Scale) */
     .drag-wrapper {
       position: absolute;
       cursor: grab;
@@ -113,7 +112,7 @@
       cursor: grabbing;
     }
 
-    /* Khung 3D của sách thiệp */
+    /* 3D Book Container */
     .book-container {
       width: 360px;
       height: 520px;
@@ -129,7 +128,6 @@
       }
     }
 
-    /* Tấm lật Trái (Trang 1 và 2) */
     .book-cover {
       width: 100%;
       height: 100%;
@@ -142,7 +140,6 @@
       z-index: 5;
     }
 
-    /* Khi mở thiệp */
     .book-container.open .book-cover {
       transform: rotateY(-180deg);
     }
@@ -157,7 +154,6 @@
       }
     }
 
-    /* Thiết kế các trang (Pages) */
     .page-face {
       position: absolute;
       width: 100%;
@@ -171,7 +167,7 @@
       background: #fff;
     }
 
-    /* Mặt 1: Bìa trước */
+    /* Mặt 1: Bìa */
     .page-1 {
       background: linear-gradient(145deg, #fff1f2 0%, #ffe4e6 100%);
       border: 3px solid #fda4af;
@@ -203,7 +199,7 @@
       justify-content: space-between;
     }
 
-    /* Mặt 3: Trang trong phải (Đế cố định) */
+    /* Mặt 3: Trang trong phải */
     .page-3 {
       position: absolute;
       top: 0;
@@ -217,7 +213,6 @@
       justify-content: space-between;
     }
 
-    /* Trang trí hoa & Tiêu đề */
     .flower-illustration {
       width: 140px;
       height: 140px;
@@ -269,7 +264,7 @@
       50% { transform: scale(1.04); opacity: 1; }
     }
 
-    /* Nội dung Lời Chúc phông Script */
+    /* Phông chữ Script cho Lời Chúc */
     .quote-decor {
       font-family: 'Great Vibes', cursive;
       font-size: 2.2rem;
@@ -306,7 +301,6 @@
       50% { opacity: 0; }
     }
 
-    /* Footer Trang Trong */
     .page-footer {
       display: flex;
       justify-content: space-between;
@@ -335,7 +329,6 @@
       transform: translateY(-1px);
     }
 
-    /* Họa tiết góc thiệp */
     .corner-ornament {
       position: absolute;
       width: 40px;
@@ -350,24 +343,19 @@
 </head>
 <body>
 
-  <!-- Canvas cánh hoa rơi -->
   <canvas id="petal-canvas"></canvas>
 
-  <!-- Toolbar công cụ Zoom & Move -->
   <div class="controls-bar">
     <button class="btn-tool" id="btn-zoom-in" title="Phóng to"><i data-lucide="zoom-in"></i></button>
     <button class="btn-tool" id="btn-zoom-out" title="Thu nhỏ"><i data-lucide="zoom-out"></i></button>
     <button class="btn-tool" id="btn-reset-pos" title="Về chính giữa"><i data-lucide="rotate-ccw"></i></button>
   </div>
 
-  <!-- Main Container -->
   <div class="app-container">
     <div class="drag-wrapper" id="drag-wrapper">
       
-      <!-- Quyển sách Thiệp 3D 4 Mặt -->
       <div class="book-container" id="book-card">
         
-        <!-- Tấm lật (Bìa 1 + Trang 2) -->
         <div class="book-cover">
           
           <!-- Mặt 1: Bìa Thiệp -->
@@ -399,15 +387,14 @@
             <svg class="corner-ornament top-left" viewBox="0 0 50 50"><path d="M0 0 L50 0 L0 50 Z" fill="#F43F5E"/></svg>
             <div class="quote-decor">Kính Gửi Thầy Cô</div>
             <div class="wish-text" id="wish-text-page2"></div>
-            <div class="page-footer">
-              <span>Trang 1/2</span>
+            <div class="page-footer" style="justify-content: flex-end;">
               <i data-lucide="heart" style="width:14px; height:14px; color:#f43f5e;"></i>
             </div>
           </div>
 
         </div>
 
-        <!-- Mặt 3: Trang Trong Phải (Cố định làm đế) -->
+        <!-- Mặt 3: Trang Trong Phải -->
         <div class="page-face page-3">
           <svg class="corner-ornament bottom-right" viewBox="0 0 50 50"><path d="M0 0 L50 0 L0 50 Z" fill="#F43F5E"/></svg>
           <div class="quote-decor">Lời Tri Ân Sâu Sắc</div>
@@ -424,23 +411,18 @@
   </div>
 
   <script>
-    // Initialize Lucide Icons
     lucide.createIcons();
 
-    // DỮ LIỆU LỜI CHÚC
     const textPart1 = "Cảm ơn Thầy/Cô vì không chỉ mang đến cho chúng con kho tàng tri thức, mà còn bao dung với những lần chúng con ngây ngô, nghịch ngợm. Từng lời răn dạy nghiêm khắc nhưng đầy tình thương, từng ánh mắt lo lắng khi thấy chúng con chểnh mảng học hành... tất cả con đều khắc sâu trong lòng.\n\nThầy/Cô chính là người đã kiên nhẫn uốn nắn, giúp con trưởng thành và vững vàng hơn từng ngày.";
 
     const textPart2 = "Nhân ngày đặc biệt này, con kính chúc Thầy/Cô luôn dồi dào sức khỏe, luôn bình an và giữ mãi ngọn lửa nhiệt huyết với nghề.\n\nMong rằng nụ cười sẽ luôn rạng rỡ trên môi Thầy/Cô khi nhìn thấy các thế hệ học trò của mình khôn lớn, nên người.\n\nChúng con yêu Thầy/Cô rất nhiều!";
 
-    // Elements
     const bookCard = document.getElementById('book-card');
     const dragWrapper = document.getElementById('drag-wrapper');
-    const hintClick = document.getElementById('hint-click');
     const btnClose = document.getElementById('btn-close');
     const wishEl2 = document.getElementById('wish-text-page2');
     const wishEl3 = document.getElementById('wish-text-page3');
 
-    // Controls
     const btnZoomIn = document.getElementById('btn-zoom-in');
     const btnZoomOut = document.getElementById('btn-zoom-out');
     const btnResetPos = document.getElementById('btn-reset-pos');
@@ -449,7 +431,6 @@
     let typingTimer1 = null;
     let typingTimer2 = null;
 
-    // Transform States
     let currentScale = 1;
     let posX = 0;
     let posY = 0;
@@ -458,7 +439,6 @@
       dragWrapper.style.transform = `translate(${posX}px, ${posY}px) scale(${currentScale})`;
     }
 
-    // --- HIỆU ỨNG MỞ / ĐÓNG THIỆP & GÕ CHỮ ---
     function openCard() {
       if (isOpen) return;
       isOpen = true;
@@ -489,7 +469,6 @@
 
       let i = 0;
       let j = 0;
-
       const cursor = '<span class="typing-cursor"></span>';
 
       function typeP1() {
@@ -523,7 +502,6 @@
       wishEl3.innerHTML = '';
     }
 
-    // --- THU PHÓNG (ZOOM) & ĐẶT LẠI VỊ TRÍ ---
     btnZoomIn.addEventListener('click', (e) => {
       e.stopPropagation();
       if (currentScale < 1.8) {
@@ -548,7 +526,6 @@
       updateTransform();
     });
 
-    // --- DI CHUYỂN THIỆP (DRAG & MOVE) ---
     let isDragging = false;
     let startX = 0;
     let startY = 0;
@@ -587,7 +564,6 @@
     window.addEventListener('touchmove', onPointerMove, { passive: true });
     window.addEventListener('touchend', onPointerUp);
 
-    // --- HIỆU ỨNG CÁNH HOA RƠI (CANVAS PETALS) ---
     const canvas = document.getElementById('petal-canvas');
     const ctx = canvas.getContext('2d');
 
