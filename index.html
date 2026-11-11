@@ -292,19 +292,41 @@
       white-space: pre-wrap;
     }
 
-    .typing-cursor {
-      display: inline-block;
-      width: 2px;
-      height: 18px;
-      background-color: var(--card-pink-main);
-      margin-left: 2px;
-      animation: blink 0.8s infinite;
-      vertical-align: middle;
+    /* Chữ viết tay: từng từ hiện dần như nét mực vừa được viết */
+    .handwriting-line {
+      display: inline;
     }
 
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
+    .handwriting-word {
+      display: inline-block;
+      opacity: 0;
+      filter: blur(1.8px);
+      transform: translateY(5px) rotate(-2deg);
+      transform-origin: left bottom;
+      animation: inkWrite 420ms cubic-bezier(.2,.75,.25,1) forwards;
+      white-space: pre;
+    }
+
+    @keyframes inkWrite {
+      0% {
+        opacity: 0;
+        filter: blur(2px);
+        transform: translateY(5px) rotate(-2deg);
+      }
+      65% {
+        opacity: .85;
+        filter: blur(.35px);
+        transform: translateY(-1px) rotate(.5deg);
+      }
+      100% {
+        opacity: 1;
+        filter: blur(0);
+        transform: translateY(0) rotate(0);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .handwriting-word { animation-duration: 1ms; filter: none; transform: none; }
     }
 
     .page-footer {
@@ -346,12 +368,17 @@
     }
     .corner-top-left { top: 0; left: 0; }
     .corner-bottom-right { bottom: 0; right: 0; transform: rotate(180deg); }
+
+
+
   </style>
 </head>
 <body>
 
   <!-- Canvas cánh hoa rơi -->
   <canvas id="petal-canvas"></canvas>
+
+
 
   <!-- Toolbar Thu phóng & Đặt lại vị trí -->
   <div class="controls-bar">
@@ -373,29 +400,44 @@
             <div class="card-subtitle">Tri Ân Ngày 20/11</div>
             
             <div class="flower-illustration">
-              <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <!-- Nền tỏa sáng -->
-                <circle cx="100" cy="105" r="75" fill="#FFE4E6"/>
-                <!-- Các Lá cây xanh -->
-                <path d="M50 110 C30 90 20 60 45 50 C60 65 65 90 50 110 Z" fill="#10B981"/>
-                <path d="M150 110 C170 90 180 60 155 50 C140 65 135 90 150 110 Z" fill="#059669"/>
-                <path d="M70 70 C60 40 90 30 100 50 C95 65 85 70 70 70 Z" fill="#34D399"/>
-                <!-- Hoa hồng đỏ đậm giữa -->
-                <circle cx="100" cy="90" r="32" fill="#E11D48"/>
-                <circle cx="100" cy="90" r="24" fill="#F43F5E"/>
-                <circle cx="100" cy="90" r="16" fill="#FB7185"/>
-                <circle cx="100" cy="90" r="8" fill="#FFF1F2"/>
-                <!-- Hoa hồng cam trái -->
-                <circle cx="68" cy="102" r="22" fill="#EA580C"/>
-                <circle cx="68" cy="102" r="15" fill="#F97316"/>
-                <circle cx="68" cy="102" r="8" fill="#FFEDD5"/>
-                <!-- Hoa hồng tím phải -->
-                <circle cx="132" cy="102" r="22" fill="#D97706"/>
-                <circle cx="132" cy="102" r="15" fill="#FBBF24"/>
-                <circle cx="132" cy="102" r="8" fill="#FEF3C7"/>
-                <!-- Nơ gói bó hoa -->
-                <path d="M75 140 L100 120 L125 140 L115 175 L100 150 L85 175 Z" fill="#E11D48"/>
-                <circle cx="100" cy="125" r="7" fill="#F43F5E"/>
+              <svg viewBox="0 0 220 230" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Bó hoa hồng nhiều màu">
+                <defs>
+                  <linearGradient id="paper" x1="55" y1="120" x2="170" y2="220" gradientUnits="userSpaceOnUse"><stop stop-color="#FFF1F2"/><stop offset="1" stop-color="#FDA4AF"/></linearGradient>
+                  <linearGradient id="leaf" x1="40" y1="65" x2="170" y2="150" gradientUnits="userSpaceOnUse"><stop stop-color="#86CFA4"/><stop offset="1" stop-color="#15803D"/></linearGradient>
+                  <radialGradient id="rose"><stop stop-color="#FFE4E6"/><stop offset=".35" stop-color="#FB7185"/><stop offset="1" stop-color="#BE123C"/></radialGradient>
+                  <radialGradient id="peach"><stop stop-color="#FFF7ED"/><stop offset=".4" stop-color="#FDBA74"/><stop offset="1" stop-color="#EA580C"/></radialGradient>
+                  <radialGradient id="lilac"><stop stop-color="#F5D0FE"/><stop offset=".45" stop-color="#C084FC"/><stop offset="1" stop-color="#7E22CE"/></radialGradient>
+                </defs>
+                <ellipse cx="111" cy="213" rx="57" ry="8" fill="#BE123C" opacity=".12"/>
+                <!-- stems and leaves -->
+                <path d="M107 112 C103 145 91 166 86 193 M112 112 C117 145 132 166 139 193 M99 112 C87 145 73 163 69 187" stroke="#398653" stroke-width="5" stroke-linecap="round"/>
+                <path d="M83 151 C48 126 34 140 48 159 C62 171 76 164 83 151Z" fill="url(#leaf)" stroke="#26734A" stroke-width="1.5"/>
+                <path d="M130 151 C164 122 181 139 165 159 C151 171 137 164 130 151Z" fill="url(#leaf)" stroke="#26734A" stroke-width="1.5"/>
+                <path d="M104 137 C74 110 62 122 77 143 C88 151 99 146 104 137Z" fill="#4DAD70"/>
+                <path d="M118 137 C145 108 160 121 145 143 C134 151 123 146 118 137Z" fill="#23834B"/>
+                <!-- flower heads: layered petals -->
+                <g transform="translate(108 78)">
+                  <g fill="#E11D48"><ellipse cy="-19" rx="13" ry="21"/><ellipse cy="19" rx="13" ry="21"/><ellipse cx="-19" rx="21" ry="13"/><ellipse cx="19" rx="21" ry="13"/><ellipse cx="-14" cy="-14" rx="13" ry="20" transform="rotate(-45 -14 -14)"/><ellipse cx="14" cy="-14" rx="13" ry="20" transform="rotate(45 14 -14)"/><ellipse cx="-14" cy="14" rx="13" ry="20" transform="rotate(45 -14 14)"/><ellipse cx="14" cy="14" rx="13" ry="20" transform="rotate(-45 14 14)"/></g>
+                  <circle r="15" fill="url(#rose)"/><path d="M-7 1 C-11 -10 4 -14 9 -5 C14 5 1 12 -5 6 C-9 2 -3 -5 2 -3" stroke="#9F1239" stroke-width="3" stroke-linecap="round"/>
+                </g>
+                <g transform="translate(58 105) scale(.78)">
+                  <g fill="#F97316"><ellipse cy="-17" rx="12" ry="19"/><ellipse cy="17" rx="12" ry="19"/><ellipse cx="-17" rx="19" ry="12"/><ellipse cx="17" rx="19" ry="12"/><ellipse cx="-12" cy="-12" rx="12" ry="18" transform="rotate(-45 -12 -12)"/><ellipse cx="12" cy="-12" rx="12" ry="18" transform="rotate(45 12 -12)"/><ellipse cx="-12" cy="12" rx="12" ry="18" transform="rotate(45 -12 12)"/><ellipse cx="12" cy="12" rx="12" ry="18" transform="rotate(-45 12 12)"/></g>
+                  <circle r="13" fill="url(#peach)"/><circle r="4" fill="#FFF7ED"/>
+                </g>
+                <g transform="translate(158 106) scale(.78)">
+                  <g fill="#A855F7"><ellipse cy="-17" rx="12" ry="19"/><ellipse cy="17" rx="12" ry="19"/><ellipse cx="-17" rx="19" ry="12"/><ellipse cx="17" rx="19" ry="12"/><ellipse cx="-12" cy="-12" rx="12" ry="18" transform="rotate(-45 -12 -12)"/><ellipse cx="12" cy="-12" rx="12" ry="18" transform="rotate(45 12 -12)"/><ellipse cx="-12" cy="12" rx="12" ry="18" transform="rotate(45 -12 12)"/><ellipse cx="12" cy="12" rx="12" ry="18" transform="rotate(-45 12 12)"/></g>
+                  <circle r="13" fill="url(#lilac)"/><circle r="4" fill="#F3E8FF"/>
+                </g>
+                <!-- tiny filler flowers -->
+                <g fill="#FDE68A"><circle cx="82" cy="48" r="4"/><circle cx="88" cy="39" r="3"/><circle cx="78" cy="38" r="3"/><circle cx="143" cy="48" r="4"/><circle cx="150" cy="39" r="3"/><circle cx="139" cy="36" r="3"/></g>
+                <!-- wrapping paper -->
+                <path d="M49 127 Q107 149 171 126 L145 211 Q111 225 76 211Z" fill="url(#paper)" stroke="#F4728B" stroke-width="2"/>
+                <path d="M49 127 Q108 157 171 126 L158 157 Q108 179 62 155Z" fill="#FFF7F8" opacity=".8"/>
+                <path d="M108 155 L108 213" stroke="#F9A8D4" stroke-width="2" opacity=".8"/>
+                <!-- ribbon -->
+                <path d="M108 167 C82 142 66 164 91 178 C99 182 105 177 108 172 C112 180 121 184 133 176 C154 160 132 144 108 167Z" fill="#E11D48" stroke="#9F1239" stroke-width="1.5"/>
+                <path d="M106 173 L91 205 L108 198 L119 207 L114 174Z" fill="#FB7185" stroke="#BE123C" stroke-width="1.5"/>
+                <circle cx="108" cy="170" r="6" fill="#FDA4AF" stroke="#BE123C" stroke-width="1.5"/>
               </svg>
             </div>
 
@@ -462,7 +504,7 @@
   </div>
 
   <script>
-    lucide.createIcons();
+    if (window.lucide) lucide.createIcons();
 
     // Nội dung lời chúc đã chỉnh xưng "em" / "chúng em" & dành riêng cho Cô Nguyễn Ngọc Hồng Phương
     const textPart1 = "Cảm ơn Cô Nguyễn Ngọc Hồng Phương vì không chỉ mang đến cho chúng em kho tàng tri thức, mà còn bao dung với những lần chúng em ngây ngô, nghịch ngợm. Từng lời răn dạy nghiêm khắc nhưng đầy tình thương, từng ánh mắt lo lắng khi thấy chúng em chểnh mảng học hành... tất cả em đều khắc sâu trong lòng.\n\nCô chính là người đã kiên nhẫn uốn nắn, giúp em trưởng thành và vững vàng hơn từng ngày.";
@@ -480,8 +522,7 @@
     const btnResetPos = document.getElementById('btn-reset-pos');
 
     let isOpen = false;
-    let typingTimer1 = null;
-    let typingTimer2 = null;
+    let handwritingTimers = [];
 
     let currentScale = 1;
     let posX = 0;
@@ -514,43 +555,38 @@
 
     btnClose.addEventListener('click', closeCard);
 
-    // Hiệu ứng gõ chữ nối tiếp mượt mà
+    // Hiệu ứng chữ viết tay: các từ lần lượt hiện ra bằng phông chữ nét viết.
     function startTyping() {
       clearTyping();
       wishEl2.innerHTML = '';
       wishEl3.innerHTML = '';
 
-      let i = 0;
-      let j = 0;
-      const cursor = '<span class="typing-cursor"></span>';
-
-      function typeP1() {
-        if (i < textPart1.length) {
-          wishEl2.innerHTML = textPart1.substring(0, i + 1) + cursor;
-          i++;
-          typingTimer1 = setTimeout(typeP1, 26);
-        } else {
-          wishEl2.innerHTML = textPart1;
-          typeP2();
-        }
+      function renderHandwriting(element, content, initialDelay) {
+        const words = content.split(/(\s+)/);
+        let delay = initialDelay;
+        words.forEach((part) => {
+          if (!part) return;
+          if (/^\s+$/.test(part)) {
+            element.appendChild(document.createTextNode(part));
+            return;
+          }
+          const span = document.createElement('span');
+          span.className = 'handwriting-word';
+          span.textContent = part;
+          span.style.animationDelay = `${delay}ms`;
+          element.appendChild(span);
+          delay += 105;
+        });
+        return delay;
       }
 
-      function typeP2() {
-        if (j < textPart2.length) {
-          wishEl3.innerHTML = textPart2.substring(0, j + 1) + cursor;
-          j++;
-          typingTimer2 = setTimeout(typeP2, 26);
-        } else {
-          wishEl3.innerHTML = textPart2;
-        }
-      }
-
-      setTimeout(typeP1, 400);
+      const endFirst = renderHandwriting(wishEl2, textPart1, 350);
+      renderHandwriting(wishEl3, textPart2, endFirst + 250);
     }
 
     function clearTyping() {
-      if (typingTimer1) clearTimeout(typingTimer1);
-      if (typingTimer2) clearTimeout(typingTimer2);
+      handwritingTimers.forEach(clearTimeout);
+      handwritingTimers = [];
       wishEl2.innerHTML = '';
       wishEl3.innerHTML = '';
     }
