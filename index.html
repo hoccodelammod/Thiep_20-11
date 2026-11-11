@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Thiệp Chúc Mừng 20/11 Tri Ân Thầy Cô</title>
+  <title>Thiệp Chúc Mừng 20/11 Tri Ân Cô</title>
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;600;700&family=Great+Vibes&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
 
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -18,9 +18,7 @@
       --bg-gradient: linear-gradient(135deg, #ffe4e6 0%, #fecdd3 50%, #fda4af 100%);
       --card-pink-dark: #e11d48;
       --card-pink-main: #f43f5e;
-      --card-pink-light: #fff1f2;
       --gold-accent: #d97706;
-      --text-color: #4c0519;
     }
 
     * {
@@ -39,7 +37,7 @@
       background: var(--bg-gradient);
     }
 
-    /* Canvas hiệu ứng hoa rơi */
+    /* Canvas cánh hoa rơi */
     #petal-canvas {
       position: fixed;
       top: 0;
@@ -85,10 +83,6 @@
       transform: scale(1.1);
     }
 
-    .btn-tool:active {
-      transform: scale(0.95);
-    }
-
     /* Card App Container & Drag Wrapper */
     .app-container {
       width: 100%;
@@ -105,7 +99,6 @@
       cursor: grab;
       touch-action: none;
       transform-origin: center center;
-      transition: transform 0.05s linear;
     }
 
     .drag-wrapper:active {
@@ -123,8 +116,8 @@
 
     @media (max-width: 480px) {
       .book-container {
-        width: 320px;
-        height: 470px;
+        width: 310px;
+        height: 480px;
       }
     }
 
@@ -150,7 +143,7 @@
 
     @media (max-width: 768px) {
       .book-container.open {
-        transform: translateX(25%) scale(0.9);
+        transform: translateX(25%) scale(0.85);
       }
     }
 
@@ -167,7 +160,7 @@
       background: #fff;
     }
 
-    /* Mặt 1: Bìa trước */
+    /* Mặt 1: Bìa Thiệp */
     .page-1 {
       background: linear-gradient(145deg, #fff1f2 0%, #ffe4e6 100%);
       border: 3px solid #fda4af;
@@ -175,14 +168,14 @@
       flex-direction: column;
       align-items: center;
       justify-content: space-between;
-      padding: 30px 20px;
+      padding: 24px 16px;
       text-align: center;
     }
 
     .page-1::before {
       content: '';
       position: absolute;
-      inset: 12px;
+      inset: 10px;
       border: 1px dashed #f43f5e;
       border-radius: 10px;
       pointer-events: none;
@@ -193,7 +186,7 @@
       transform: rotateY(180deg);
       background: #fff;
       border: 1px solid #fecdd3;
-      padding: 30px 22px;
+      padding: 24px 18px 16px 18px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -207,42 +200,38 @@
       z-index: 1;
       background: #fff;
       border: 1px solid #fecdd3;
-      padding: 30px 22px;
+      padding: 24px 18px 16px 18px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
     }
 
+    /* Bó hoa trang trí bìa trước */
     .flower-illustration {
-      width: 140px;
-      height: 140px;
+      width: 150px;
+      height: 150px;
       position: relative;
-      margin: 10px auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      margin: 5px auto;
     }
 
     .flower-illustration svg {
       width: 100%;
       height: 100%;
-      filter: drop-shadow(0 8px 15px rgba(225, 29, 72, 0.2));
+      filter: drop-shadow(0 8px 15px rgba(225, 29, 72, 0.25));
     }
 
     .card-title-main {
       font-family: 'Great Vibes', cursive;
-      font-size: 2.8rem;
+      font-size: clamp(2.2rem, 6vw, 2.7rem);
       color: var(--card-pink-dark);
-      line-height: 1.2;
-      margin-top: 10px;
-      text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+      line-height: 1.25;
+      margin-top: 5px;
     }
 
     .card-subtitle {
       font-family: 'Dancing Script', cursive;
-      font-size: 1.6rem;
+      font-size: 1.5rem;
       color: var(--gold-accent);
-      margin-bottom: 5px;
       font-weight: 700;
     }
 
@@ -252,7 +241,7 @@
       gap: 8px;
       font-size: 0.85rem;
       color: #9f1239;
-      background: rgba(244, 63, 94, 0.1);
+      background: rgba(244, 63, 94, 0.12);
       padding: 8px 18px;
       border-radius: 20px;
       animation: pulse 2s infinite;
@@ -264,26 +253,43 @@
       50% { transform: scale(1.04); opacity: 1; }
     }
 
-    /* Phông chữ Script cho Lời Chúc */
+    /* Lời chúc & Tiêu đề phông Script */
     .quote-decor {
       font-family: 'Great Vibes', cursive;
-      font-size: 2.2rem;
+      font-size: 2rem;
       color: var(--card-pink-dark);
       text-align: center;
       border-bottom: 1px solid #ffe4e6;
-      padding-bottom: 5px;
-      margin-bottom: 10px;
+      padding-bottom: 4px;
+      margin-bottom: 8px;
+      flex-shrink: 0;
+    }
+
+    /* Khung chứa văn bản tự cuộn chống tràn/mất chữ */
+    .wish-scroll-area {
+      flex: 1;
+      overflow-y: auto;
+      padding-right: 4px;
+      margin-bottom: 8px;
+    }
+
+    /* Tùy chỉnh thanh cuộn siêu mỏng đẹp mắt */
+    .wish-scroll-area::-webkit-scrollbar {
+      width: 3px;
+    }
+    .wish-scroll-area::-webkit-scrollbar-thumb {
+      background: #fecdd3;
+      border-radius: 3px;
     }
 
     .wish-text {
       font-family: 'Dancing Script', cursive;
-      font-size: 1.25rem;
+      font-size: clamp(1.1rem, 3.8vw, 1.25rem);
       font-weight: 600;
-      line-height: 1.5;
+      line-height: 1.45;
       color: #881337;
       text-align: justify;
       white-space: pre-wrap;
-      min-height: 220px;
     }
 
     .typing-cursor {
@@ -306,9 +312,10 @@
       justify-content: space-between;
       align-items: center;
       border-top: 1px dashed #fecdd3;
-      padding-top: 10px;
+      padding-top: 8px;
       font-size: 0.75rem;
       color: #9ca3af;
+      flex-shrink: 0;
     }
 
     .btn-close-card {
@@ -329,22 +336,24 @@
       transform: translateY(-1px);
     }
 
-    .corner-ornament {
+    /* SVG Họa tiết Hoa góc thiệp */
+    .corner-floral {
       position: absolute;
-      width: 40px;
-      height: 40px;
+      width: 55px;
+      height: 55px;
       pointer-events: none;
-      opacity: 0.4;
+      z-index: 2;
     }
-
-    .top-left { top: 8px; left: 8px; }
-    .bottom-right { bottom: 8px; right: 8px; transform: rotate(180deg); }
+    .corner-top-left { top: 0; left: 0; }
+    .corner-bottom-right { bottom: 0; right: 0; transform: rotate(180deg); }
   </style>
 </head>
 <body>
 
+  <!-- Canvas cánh hoa rơi -->
   <canvas id="petal-canvas"></canvas>
 
+  <!-- Toolbar Thu phóng & Đặt lại vị trí -->
   <div class="controls-bar">
     <button class="btn-tool" id="btn-zoom-in" title="Phóng to"><i data-lucide="zoom-in"></i></button>
     <button class="btn-tool" id="btn-zoom-out" title="Thu nhỏ"><i data-lucide="zoom-out"></i></button>
@@ -354,23 +363,39 @@
   <div class="app-container">
     <div class="drag-wrapper" id="drag-wrapper">
       
+      <!-- Thiệp Quyển Sách 3D -->
       <div class="book-container" id="book-card">
         
         <div class="book-cover">
           
-          <!-- Mặt 1: Bìa Thiệp -->
+          <!-- MẶT 1: BÌA TRƯỚC (Bó Hoa Rực Rỡ) -->
           <div class="page-face page-1">
             <div class="card-subtitle">Tri Ân Ngày 20/11</div>
             
             <div class="flower-illustration">
               <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="100" cy="100" r="80" fill="#FFE4E6"/>
-                <path d="M100 140C100 140 70 110 50 85C30 60 50 30 75 30C90 30 100 45 100 45C100 45 110 30 125 30C150 30 170 60 150 85C130 110 100 140 100 140Z" fill="#F43F5E"/>
-                <path d="M100 130C100 130 75 105 58 83C42 61 58 35 78 35C90 35 100 48 100 48C100 48 110 35 122 35C142 35 158 61 142 83C125 105 100 130 100 130Z" fill="#FB7185"/>
-                <path d="M70 140Q100 170 130 140" stroke="#E11D48" stroke-width="4" stroke-linecap="round"/>
-                <path d="M100 140L100 175" stroke="#059669" stroke-width="5" stroke-linecap="round"/>
-                <path d="M100 160Q80 150 65 160" stroke="#10B981" stroke-width="4" stroke-linecap="round"/>
-                <path d="M100 165Q120 155 135 165" stroke="#10B981" stroke-width="4" stroke-linecap="round"/>
+                <!-- Nền tỏa sáng -->
+                <circle cx="100" cy="105" r="75" fill="#FFE4E6"/>
+                <!-- Các Lá cây xanh -->
+                <path d="M50 110 C30 90 20 60 45 50 C60 65 65 90 50 110 Z" fill="#10B981"/>
+                <path d="M150 110 C170 90 180 60 155 50 C140 65 135 90 150 110 Z" fill="#059669"/>
+                <path d="M70 70 C60 40 90 30 100 50 C95 65 85 70 70 70 Z" fill="#34D399"/>
+                <!-- Hoa hồng đỏ đậm giữa -->
+                <circle cx="100" cy="90" r="32" fill="#E11D48"/>
+                <circle cx="100" cy="90" r="24" fill="#F43F5E"/>
+                <circle cx="100" cy="90" r="16" fill="#FB7185"/>
+                <circle cx="100" cy="90" r="8" fill="#FFF1F2"/>
+                <!-- Hoa hồng cam trái -->
+                <circle cx="68" cy="102" r="22" fill="#EA580C"/>
+                <circle cx="68" cy="102" r="15" fill="#F97316"/>
+                <circle cx="68" cy="102" r="8" fill="#FFEDD5"/>
+                <!-- Hoa hồng tím phải -->
+                <circle cx="132" cy="102" r="22" fill="#D97706"/>
+                <circle cx="132" cy="102" r="15" fill="#FBBF24"/>
+                <circle cx="132" cy="102" r="8" fill="#FEF3C7"/>
+                <!-- Nơ gói bó hoa -->
+                <path d="M75 140 L100 120 L125 140 L115 175 L100 150 L85 175 Z" fill="#E11D48"/>
+                <circle cx="100" cy="125" r="7" fill="#F43F5E"/>
               </svg>
             </div>
 
@@ -382,23 +407,49 @@
             </div>
           </div>
 
-          <!-- Mặt 2: Trang Trong Trái -->
+          <!-- MẶT 2: TRANG TRONG TRÁI -->
           <div class="page-face page-2">
-            <svg class="corner-ornament top-left" viewBox="0 0 50 50"><path d="M0 0 L50 0 L0 50 Z" fill="#F43F5E"/></svg>
-            <div class="quote-decor">Kính Gửi Thầy Cô</div>
-            <div class="wish-text" id="wish-text-page2"></div>
+            <!-- Hoa trang trí góc trên trái -->
+            <svg class="corner-floral corner-top-left" viewBox="0 0 100 100" fill="none">
+              <path d="M0 0 L80 0 C60 20 40 40 0 80 Z" fill="#FFE4E6"/>
+              <circle cx="25" cy="25" r="16" fill="#F43F5E"/>
+              <circle cx="25" cy="25" r="10" fill="#FB7185"/>
+              <circle cx="55" cy="18" r="10" fill="#E11D48"/>
+              <circle cx="18" cy="55" r="10" fill="#E11D48"/>
+            </svg>
+
+            <div class="quote-decor">Kính Gửi Cô</div>
+            
+            <!-- Khung cuộn chống mất chữ -->
+            <div class="wish-scroll-area">
+              <div class="wish-text" id="wish-text-page2"></div>
+            </div>
+
             <div class="page-footer" style="justify-content: flex-end;">
-              <i data-lucide="heart" style="width:14px; height:14px; color:#f43f5e;"></i>
+              <i data-lucide="heart" style="width:15px; height:15px; color:#f43f5e;"></i>
             </div>
           </div>
 
         </div>
 
-        <!-- Mặt 3: Trang Trong Phải -->
+        <!-- MẶT 3: TRANG TRONG PHẢI -->
         <div class="page-face page-3">
-          <svg class="corner-ornament bottom-right" viewBox="0 0 50 50"><path d="M0 0 L50 0 L0 50 Z" fill="#F43F5E"/></svg>
+          <!-- Hoa trang trí góc dưới phải -->
+          <svg class="corner-floral corner-bottom-right" viewBox="0 0 100 100" fill="none">
+            <path d="M0 0 L80 0 C60 20 40 40 0 80 Z" fill="#FFE4E6"/>
+            <circle cx="25" cy="25" r="16" fill="#F43F5E"/>
+            <circle cx="25" cy="25" r="10" fill="#FB7185"/>
+            <circle cx="55" cy="18" r="10" fill="#E11D48"/>
+            <circle cx="18" cy="55" r="10" fill="#E11D48"/>
+          </svg>
+
           <div class="quote-decor">Lời Tri Ân Sâu Sắc</div>
-          <div class="wish-text" id="wish-text-page3"></div>
+          
+          <!-- Khung cuộn chống mất chữ -->
+          <div class="wish-scroll-area">
+            <div class="wish-text" id="wish-text-page3"></div>
+          </div>
+
           <div class="page-footer">
             <span>20/11 Tri Ân</span>
             <button class="btn-close-card" id="btn-close">Đóng Thiệp</button>
@@ -413,7 +464,7 @@
   <script>
     lucide.createIcons();
 
-    // Dữ liệu lời chúc đã được cập nhật xưng "em" và "chúng em"
+    // Nội dung lời chúc đã chỉnh xưng "em" / "chúng em" & dành riêng cho Cô Nguyễn Ngọc Hồng Phương
     const textPart1 = "Cảm ơn Cô Nguyễn Ngọc Hồng Phương vì không chỉ mang đến cho chúng em kho tàng tri thức, mà còn bao dung với những lần chúng em ngây ngô, nghịch ngợm. Từng lời răn dạy nghiêm khắc nhưng đầy tình thương, từng ánh mắt lo lắng khi thấy chúng em chểnh mảng học hành... tất cả em đều khắc sâu trong lòng.\n\nCô chính là người đã kiên nhẫn uốn nắn, giúp em trưởng thành và vững vàng hơn từng ngày.";
 
     const textPart2 = "Nhân ngày đặc biệt này, em kính chúc Cô luôn dồi dào sức khỏe, luôn bình an và giữ mãi ngọn lửa nhiệt huyết với nghề.\n\nMong rằng nụ cười sẽ luôn rạng rỡ trên môi Cô khi nhìn thấy các thế hệ học trò của mình khôn lớn, nên người.\n\nChúng em yêu Cô rất nhiều!";
@@ -463,6 +514,7 @@
 
     btnClose.addEventListener('click', closeCard);
 
+    // Hiệu ứng gõ chữ nối tiếp mượt mà
     function startTyping() {
       clearTyping();
       wishEl2.innerHTML = '';
@@ -476,7 +528,7 @@
         if (i < textPart1.length) {
           wishEl2.innerHTML = textPart1.substring(0, i + 1) + cursor;
           i++;
-          typingTimer1 = setTimeout(typeP1, 28);
+          typingTimer1 = setTimeout(typeP1, 26);
         } else {
           wishEl2.innerHTML = textPart1;
           typeP2();
@@ -487,7 +539,7 @@
         if (j < textPart2.length) {
           wishEl3.innerHTML = textPart2.substring(0, j + 1) + cursor;
           j++;
-          typingTimer2 = setTimeout(typeP2, 28);
+          typingTimer2 = setTimeout(typeP2, 26);
         } else {
           wishEl3.innerHTML = textPart2;
         }
@@ -503,6 +555,7 @@
       wishEl3.innerHTML = '';
     }
 
+    // Zoom & Reset controls
     btnZoomIn.addEventListener('click', (e) => {
       e.stopPropagation();
       if (currentScale < 1.8) {
@@ -513,7 +566,7 @@
 
     btnZoomOut.addEventListener('click', (e) => {
       e.stopPropagation();
-      if (currentScale > 0.6) {
+      if (currentScale > 0.55) {
         currentScale -= 0.15;
         updateTransform();
       }
@@ -527,6 +580,7 @@
       updateTransform();
     });
 
+    // Kéo thả di chuyển (Drag & Move)
     let isDragging = false;
     let startX = 0;
     let startY = 0;
@@ -565,6 +619,7 @@
     window.addEventListener('touchmove', onPointerMove, { passive: true });
     window.addEventListener('touchend', onPointerUp);
 
+    // Canvas cánh hoa hồng rơi 
     const canvas = document.getElementById('petal-canvas');
     const ctx = canvas.getContext('2d');
 
